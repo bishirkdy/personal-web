@@ -5,11 +5,10 @@ import {
 } from "react-router-dom";
 import Login from "./components/Login";
 import App from "./App";
-import Register from "./components/register";
+import Register from "./components/Register";
 import Authenticate from "./components/Authenticate";
 import MyWork from "./pages/works/MyWork";
 import VerifyAccount from "./components/VerifyAccount";
-import NavBar from "./components/NavBar";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
