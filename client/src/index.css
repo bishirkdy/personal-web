@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+
+@import url('https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@300..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Edu+VIC+WA+NT+Hand+Pre:wght@614&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rubik+Dirt&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Righteous&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Savate:ital,wght@0,200..900;1,200..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Edu+VIC+WA+NT+Hand+Pre:wght@400..700&display=swap');
+.navName {
+  font-family: "Edu VIC WA NT Hand Pre", cursive;
+  font-optical-sizing: auto;
+  font-weight: 614;
+  font-style: normal;
+}
+.rubik-dirt-regular {
+  font-family: "Rubik Dirt", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+.righteous-regular {
+  font-family: "Righteous", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+.savate-font {
+  font-family: "Savate", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 550;
+  font-style: normal;
+}
+.abcd {
+  font-family: "Edu VIC WA NT Hand Pre", cursive;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+}
+
+
+:root {
+  --main-font: "Sansita Swashed", system-ui;
+  --color-primary: #E0E1DD;
+  --color-secondary: #091d33;
+}
+
+* {
+  box-sizing: border-box;
+  margin:0;
+}
+
+body {
+  font-family: var(--main-font); 
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #333;
+  background-color: #f8f9fa;
+}
