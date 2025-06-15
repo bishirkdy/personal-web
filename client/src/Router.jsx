@@ -9,12 +9,14 @@ import Register from "./components/Register";
 import Authenticate from "./components/Authenticate";
 import MyWork from "./pages/works/MyWork";
 import VerifyAccount from "./components/VerifyAccount";
+import CreateProject from "./pages/admin/createProject";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="login" element={<Login />} />
       <Route path="register" element={<Register />} />
+      <Route path="create-project" element={<CreateProject/>}/>
       <Route path="/" element={<App />} />
       <Route path="verify-account" element={<VerifyAccount />} />
       <Route element={<Authenticate />}>
