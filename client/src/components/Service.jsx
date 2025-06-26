@@ -39,8 +39,8 @@ const services = [
 const Service = () => {
   return (
     <div className="bg-[var(--color-secondary)] pt-10 pb-20 flex flex-col items-center justify-center">
-      <div className="p-2 border rounded-2xl text-white">
-        <h1 className="text-lg font-bold text-white mb-12">My Services</h1>
+      <div className="p-2 border rounded-2xl mb-12 text-white">
+        <h1 className="text-lg font-bold text-white">My Services</h1>
       </div>
       <p className="text-white text-center text-2xl font-bold max-w-xl w-[90vw] pt-2">
         Beyond visual design <br /> We craft user-centered digital experiences

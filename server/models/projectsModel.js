@@ -8,6 +8,7 @@ const projectSchema = new mongoose.Schema({
     offerPrice : Number ,
     category : {type : String , required : true },
     file : {type : String , required : true },
+    software : {type : String , required : true},
 }, { timestamps: true})
 
 const Project = mongoose.model("Project" , projectSchema)

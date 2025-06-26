@@ -96,7 +96,6 @@ export const verifyMail = async (req, res, next) => {
     user.otp = null;
     user.otpExpiry = null;
     user.otpCreatedAt = null;
-    user.roll = "user";
     await user.save();
 
     generateToken(res, user._id , user.role);
@@ -105,7 +104,7 @@ export const verifyMail = async (req, res, next) => {
         id: user._id,
         name: user.name,
         email: user.email,
-        roll : user.roll
+        role : user.role
       },
     });
   } catch (error) {

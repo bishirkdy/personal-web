@@ -1,8 +1,7 @@
 import multer from 'multer';
 import { CloudinaryStorage } from 'multer-storage-cloudinary';
-import cloudinary from '../db/cloudnery.js'; // Make sure the filename is correct
+import cloudinary from '../db/cloudnery.js';
 
-// File type validation function
 const fileFilter = (req, file, cb) => {
   if (file.fieldname === 'image') {
     // Accept image mimetypes

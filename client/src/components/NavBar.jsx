@@ -1,25 +1,27 @@
 import React, { useState, useEffect } from "react";
-import linkedIn from "../assets/linkedin.png";
-import instagram from "../assets/instagram.png";
-import github from "../assets/github.png";
-import { FaTimes, FaBars } from 'react-icons/fa';
+import { FaTimes, FaBars, FaCartArrowDown } from "react-icons/fa";
+import { IoLogIn } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
 
-const NavBar = () => {
+const NavBar = ({ onCartClick }) => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleClick = (e) => {
-      if (menuOpen && !e.target.closest("#mobileMenu") && !e.target.closest("#hamburgerBtn")) {
+      if (
+        menuOpen &&
+        !e.target.closest("#mobileMenu") &&
+        !e.target.closest("#hamburgerBtn")
+      ) {
         setMenuOpen(false);
       }
     };
-
     if (menuOpen) {
       document.addEventListener("mousedown", handleClick);
     } else {
       document.removeEventListener("mousedown", handleClick);
     }
-
     return () => document.removeEventListener("mousedown", handleClick);
   }, [menuOpen]);
 
@@ -30,19 +32,21 @@ const NavBar = () => {
     { href: "/contact", label: "Contact" },
   ];
 
-  const socialLinks = [
-    { href: "" , src: instagram, alt: "Instagram" },
-    { href: "", src: linkedIn, alt: "LinkedIn" },
-    { href: "", src: github, alt: "GitHub" },
-  ];
-
   const NavLinks = ({ isMobile, onClick }) => (
-    <ul className={`flex ${isMobile ? "flex-col pt-6" : "flex-row justify-around items-center gap-3 md:gap-8"}`}>
+    <ul
+      className={`flex ${
+        isMobile
+          ? "flex-col pt-6"
+          : "flex-row justify-around items-center gap-3 md:gap-8"
+      }`}
+    >
       {navItems.map((item) => (
         <li key={item.label}>
           <a
             href={item.href}
-            className={`block text-sm md:text-md text-black rounded-xl hover:bg-[var(--color-secondary)] p-2 hover:text-[var(--color-primary)] transition-colors duration-200 ${isMobile ? "text-lg" : ""}`}
+            className={`block text-sm md:text-md text-black rounded-xl hover:bg-[var(--color-secondary)] p-2 hover:text-[var(--color-primary)] transition-colors duration-200 ${
+              isMobile ? "text-lg" : ""
+            }`}
             onClick={isMobile ? onClick : undefined}
           >
             {item.label}
@@ -52,30 +56,15 @@ const NavBar = () => {
     </ul>
   );
 
-  const SocialLinks = ({ isMobile, onClick }) => (
-    <ul className={`flex ${isMobile ? "flex-row gap-5 pt-6 border-t border-gray-600" : "flex-row justify-around items-center gap-2 md:gap-4"}`}>
-      {socialLinks.map((social, index) => (
-        <li key={index}>
-          <a
-            href={social.href}
-            aria-label={social.alt}
-            onClick={isMobile ? onClick : undefined}
-          >
-            <img
-              src={social.src}
-              className={`w-5 h-5 md:w-6 md:h-6 hover:scale-110 transition-transform ${isMobile ? "w-6 h-6" : ""}`}
-              alt={social.alt}
-            />
-          </a>
-        </li>
-      ))}
-    </ul>
-  );
+  const handleLogin = () => navigate("/login");
 
   return (
     <nav className="flex flex-row justify-between items-center bg-[var(--color-primary)] py-4 px-4 md:px-8 lg:px-32 relative z-50">
       <div className="pl-0">
-        <a className="navName text-xl md:text-2xl font-bold text-black tracking-tight" href="/">
+        <a
+          className="navName text-xl md:text-2xl font-bold text-black tracking-tight"
+          href="/"
+        >
           Bishir kdy
         </a>
       </div>
@@ -84,8 +73,21 @@ const NavBar = () => {
         <NavLinks isMobile={false} />
       </div>
 
-      <div className="pr-0 hidden sm:block">
-        <SocialLinks isMobile={false} />
+      <div className="pr-0 hidden sm:flex gap-2 items-center">
+        <button
+          onClick={onCartClick}
+          className="flex items-center gap-2 bg-[var(--color-secondary)] text-[var(--color-primary)] px-4 py-2 rounded-xl font-semibold hover:bg-[var(--color-primary)] hover:text-[var(--color-secondary)] transition-colors"
+        >
+          <FaCartArrowDown />
+          Cart
+        </button>
+        <button
+          onClick={handleLogin}
+          className="flex items-center gap-2 bg-[var(--color-secondary)] text-[var(--color-primary)] px-4 py-2 rounded-xl font-semibold hover:bg-[var(--color-primary)] hover:text-[var(--color-secondary)] transition-colors"
+        >
+          <IoLogIn />
+          Login
+        </button>
       </div>
 
       <div className="block sm:hidden">
@@ -116,10 +118,30 @@ const NavBar = () => {
             </button>
             <div className="mt-10 pb-2 flex h-full flex-col justify-between">
               <NavLinks isMobile={true} onClick={() => setMenuOpen(false)} />
-              <SocialLinks isMobile={true} onClick={() => setMenuOpen(false)} />
+              <div className="flex flex-col gap-3 mt-8">
+                <button
+                  onClick={() => {
+                    onCartClick();
+                    setMenuOpen(false);
+                  }}
+                  className="w-full flex items-center justify-center gap-2 bg-[var(--color-secondary)] text-[var(--color-primary)] px-4 py-2 rounded-xl font-semibold hover:bg-[var(--color-primary)] hover:text-[var(--color-secondary)] transition-colors"
+                >
+                  <FaCartArrowDown />
+                  Cart
+                </button>
+                <button
+                  onClick={() => {
+                    handleLogin();
+                    setMenuOpen(false);
+                  }}
+                  className="w-full flex items-center justify-center gap-2 bg-[var(--color-secondary)] text-[var(--color-primary)] px-4 py-2 rounded-xl font-semibold hover:bg-[var(--color-primary)] hover:text-[var(--color-secondary)] transition-colors"
+                >
+                  <IoLogIn />
+                  Login
+                </button>
+              </div>
             </div>
           </div>
-
           <style jsx>{`
             .animate-slide-in-right {
               animation: slideInRight 0.3s cubic-bezier(0.4, 0, 0.2, 1);

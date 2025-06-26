@@ -43,10 +43,6 @@
   --color-secondary: #091d33;
 }
 
-* {
-  box-sizing: border-box;
-  margin:0;
-}
 
 body {
   font-family: var(--main-font); 
@@ -56,4 +52,5 @@ body {
   line-height: 1.5;
   color: #333;
   background-color: #f8f9fa;
+  padding : 0 , 20px;
 }

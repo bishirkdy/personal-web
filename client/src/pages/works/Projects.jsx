@@ -27,7 +27,7 @@ const Projects = () => {
                 src={work.img}
                 className="w-full h-full object-cover rounded-[20%] transition-transform duration-300 hover:scale-105"
                 alt={`Work ${work.id}`}
-                loading="lazy"
+                loading="loading"
               />
             </div>
           </div>

@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { MdPerson, MdEmail, MdLock } from 'react-icons/md';
 import { useRegisterMutation } from '../redux/api/authApi';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { setUser } from '../redux/features/authSlice';
 
 const Register = () => {
   const [name, setName] = useState('');
