@@ -1,6 +1,14 @@
+import { useNavigate } from "react-router";
 const Cart = ({ open, onClose, cartItems = { items: [], totalPrice: 0 } }) => {
   const items = Array.isArray(cartItems.items) ? cartItems.items : [];
   const isEmpty = items.length === 0;
+
+  const navigate = useNavigate()
+    const handleCheckout = () => {
+      navigate("/payment" , {
+        state : {totalPrice : cartItems.totalPrice}
+      })
+    }
 
   return (
     <>
@@ -93,6 +101,7 @@ const Cart = ({ open, onClose, cartItems = { items: [], totalPrice: 0 } }) => {
             </span>
           </div>
           <button
+          onClick={handleCheckout}
             className={`w-full bg-[var(--color-secondary)] text-white py-2 rounded-lg font-semibold border border-[var(--color-secondary)] transition ${
               isEmpty
                 ? "opacity-50 cursor-not-allowed"

@@ -1,4 +1,3 @@
-// Layout.jsx
 import React, { useRef, useState } from "react";
 import { Outlet } from "react-router-dom";
 import NavBar from "./components/NavBar";
@@ -9,7 +8,6 @@ import { useSelector } from "react-redux";
 const Layout = () => {
   const [cartOpen, setCartOpen] = useState(false);
   const cartItems = useSelector(state => state.cart)
-  console.log(cartItems);
   
   const contactRef = useRef(null);
 

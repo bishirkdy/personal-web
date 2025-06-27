@@ -6,7 +6,7 @@ import Home from "./pages/Home";
 
 const App = () => {
   const location = useLocation();
-  const { contactRef } = useOutletContext(); // 👈 use context from Outlet
+  const { contactRef } = useOutletContext();
 
   useEffect(() => {
     if (location.state?.scrollToContact) {

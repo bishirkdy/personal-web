@@ -13,8 +13,7 @@ import CreateProject from "./pages/admin/createProject";
 import Layout from "./Layout";
 import SpecifiedProject from "./pages/works/SpecifiedProject";
 import UpdateProject from "./pages/admin/UpdateProject";
-import Cart from "./pages/cart/Cart";
-import Contact from "./components/Contact";
+import PaymentPage from "./pages/payment/PaymentPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -27,11 +26,11 @@ const router = createBrowserRouter(
         <Route path="create-project" element={<CreateProject />} />
         <Route path="update-project/:_id" element={<UpdateProject/>}/>
         <Route path="/" element={<App />} />
+        <Route path="payment" element={<PaymentPage/>}/>
 
         <Route element={<Authenticate />}>
         <Route path="projects" element={<MyWork />} />
         <Route path="projects/:id" element={<SpecifiedProject/>}/>
-        {/* <Route path="cart" element={<Cart/>}/> */}
       </Route>
       </Route>    
     </>
