@@ -6,7 +6,6 @@ const Work = () => {
   if (isLoading) {
     return <h2 className="text-center pt-10">Loading...</h2>;
   }
-console.log(data);
 
   if (error) {
     return <h2 className="text-center pt-10 text-red-600">Error loading projects</h2>;

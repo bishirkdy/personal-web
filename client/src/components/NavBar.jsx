@@ -1,11 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { FaTimes, FaBars, FaCartArrowDown } from "react-icons/fa";
 import { IoLogIn } from "react-icons/io5";
+import { IoMdLogOut } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-const NavBar = ({ onCartClick }) => {
+const NavBar = ({ onCartClick, onContactClick }) => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const location = useLocation();
   const navigate = useNavigate();
+  const { user } = useSelector((state) => state.auth);
+
+  const handleContactClick = () => {
+    if (location.pathname !== "/") {
+      navigate("/", { state: { scrollToContact: true } });
+    } else {
+      onContactClick();
+    }
+  };
 
   useEffect(() => {
     const handleClick = (e) => {
@@ -29,7 +42,7 @@ const NavBar = ({ onCartClick }) => {
     { href: "/", label: "Home" },
     { href: "/about", label: "About" },
     { href: "/projects", label: "Work" },
-    { href: "/contact", label: "Contact" },
+    { isContact: true, label: "Contact" },
   ];
 
   const NavLinks = ({ isMobile, onClick }) => (
@@ -42,15 +55,29 @@ const NavBar = ({ onCartClick }) => {
     >
       {navItems.map((item) => (
         <li key={item.label}>
-          <a
-            href={item.href}
-            className={`block text-sm md:text-md text-black rounded-xl hover:bg-[var(--color-secondary)] p-2 hover:text-[var(--color-primary)] transition-colors duration-200 ${
-              isMobile ? "text-lg" : ""
-            }`}
-            onClick={isMobile ? onClick : undefined}
-          >
-            {item.label}
-          </a>
+          {item.isContact ? (
+            <button
+              onClick={() => {
+                handleContactClick();
+                if (isMobile) onClick();
+              }}
+              className={`block text-sm md:text-md text-black rounded-xl hover:bg-[var(--color-secondary)] p-2 hover:text-[var(--color-primary)] transition-colors duration-200 ${
+                isMobile ? "text-lg" : ""
+              }`}
+            >
+              {item.label}
+            </button>
+          ) : (
+            <a
+              href={item.href}
+              className={`block text-sm md:text-md text-black rounded-xl hover:bg-[var(--color-secondary)] p-2 hover:text-[var(--color-primary)] transition-colors duration-200 ${
+                isMobile ? "text-lg" : ""
+              }`}
+              onClick={isMobile ? onClick : undefined}
+            >
+              {item.label}
+            </a>
+          )}
         </li>
       ))}
     </ul>
@@ -85,8 +112,17 @@ const NavBar = ({ onCartClick }) => {
           onClick={handleLogin}
           className="flex items-center gap-2 bg-[var(--color-secondary)] text-[var(--color-primary)] px-4 py-2 rounded-xl font-semibold hover:bg-[var(--color-primary)] hover:text-[var(--color-secondary)] transition-colors"
         >
-          <IoLogIn />
-          Login
+          {!user ? (
+            <>
+              <IoLogIn />
+              Login
+            </>
+          ) : (
+            <>
+              <IoMdLogOut />
+              Logout
+            </>
+          )}
         </button>
       </div>
 
@@ -136,8 +172,17 @@ const NavBar = ({ onCartClick }) => {
                   }}
                   className="w-full flex items-center justify-center gap-2 bg-[var(--color-secondary)] text-[var(--color-primary)] px-4 py-2 rounded-xl font-semibold hover:bg-[var(--color-primary)] hover:text-[var(--color-secondary)] transition-colors"
                 >
-                  <IoLogIn />
-                  Login
+                  {!user ? (
+                    <>
+                      <IoLogIn />
+                      Login
+                    </>
+                  ) : (
+                    <>
+                      <IoMdLogOut />
+                      Logout
+                    </>
+                  )}
                 </button>
               </div>
             </div>

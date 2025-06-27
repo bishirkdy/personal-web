@@ -12,7 +12,7 @@ const Contact = () => {
   return (
     <div className="bg-[var(--color-primary)] min-h-screen flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-6xl grid md:grid-cols-2 gap-10 items-center">
-        {/* Left Side - Heading */}
+
         <div className="text-center md:text-left space-y-6">
           <div className="inline-block border px-4 py-2 rounded-2xl shadow-md">
             <h1 className="text-2xl font-bold tracking-wide">Contact Me</h1>
@@ -24,7 +24,6 @@ const Contact = () => {
           </p>
         </div>
 
-        {/* Right Side - Form */}
         <form
           className={`w-full max-w-md bg-white/80 p-8 rounded-3xl shadow-2xl border border-white/60 backdrop-blur-md transition-all duration-700 ease-out
             ${mounted ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-10 scale-95"}

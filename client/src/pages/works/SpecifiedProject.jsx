@@ -4,17 +4,27 @@ import { useDeleteProjectMutation } from "../../redux/api/projectApi";
 import { useParams } from "react-router";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../redux/features/cartSlice";
+
 const SpecifiedProject = () => {
   const { id } = useParams();
+  console.log(id);
+  
   const { data, isLoading, error } = useProjectDetailsQuery(id);
-const [deleteData, { isLoading: deleteLoading, isError: deleteError }] = useDeleteProjectMutation();
+  console.log(data);
+  
+  const [deleteData, { isLoading: deleteLoading, isError: deleteError }] =
+    useDeleteProjectMutation();
   const { user } = useSelector((state) => state.auth);
   const isAdmin = user.role == "admin";
-    const navigate = useNavigate()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   if (isLoading) return null;
 
   const selectedData = data?.data;
-
+  console.log(selectedData);
+  
   if (!selectedData) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] px-4 text-center">
@@ -28,8 +38,12 @@ const [deleteData, { isLoading: deleteLoading, isError: deleteError }] = useDele
     );
   }
   const handleDelete = async () => {
-    await deleteData(id).unwrap()
-    navigate('/projects')
+    await deleteData(id).unwrap();
+    navigate("/projects");
+  };
+  const addToCartHandler = async () => {
+    await dispatch(addToCart({projects : selectedData}))
+    navigate("/projects")
   }
 
   return (
@@ -68,30 +82,27 @@ const [deleteData, { isLoading: deleteLoading, isError: deleteError }] = useDele
           {isAdmin ? (
             <div className="flex gap-4 mt-6">
               <button
-              onClick={() => (navigate(`/update-project/${selectedData._id}`))}
+                onClick={() => navigate(`/update-project/${selectedData._id}`)}
                 className="px-6 py-3 bg-[var(--color-secondary)] text-white font-semibold rounded-lg hover:bg-blue-900 cursor-pointer transition"
               >
                 Update
               </button>
 
               <button
-              onClick={handleDelete}
+                onClick={handleDelete}
                 className="px-6 py-3 bg-red-500 text-white font-semibold border cursor-pointer border-gray-300 rounded-lg hover:bg-red-900 transition"
               >
                 Delete
               </button>
             </div>
-          ) : 
-          (
-                        <div className="flex gap-4 mt-6">
-              <button
-                className="px-6 py-3 bg-[var(--color-secondary)] text-white font-semibold rounded-lg hover:bg-blue-900 cursor-pointer transition"
-              >
+          ) : (
+            <div className="flex gap-4 mt-6">
+              <button onClick={addToCartHandler} 
+              className="px-6 py-3 bg-[var(--color-secondary)] text-white font-semibold rounded-lg hover:bg-blue-900 cursor-pointer transition">
                 Add To Cart
               </button>
             </div>
-          )
-          }
+          )}
         </div>
       </div>
     </div>

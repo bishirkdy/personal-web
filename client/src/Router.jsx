@@ -22,7 +22,6 @@ const router = createBrowserRouter(
       <Route path="login" element={<Login />} />
       <Route path="register" element={<Register />} />
       <Route path="verify-account" element={<VerifyAccount />} />
-      <Route path="contact" element={<Contact/>}/>
 
       <Route element={<Layout />}>
         <Route path="create-project" element={<CreateProject />} />

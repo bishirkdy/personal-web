@@ -1,17 +1,19 @@
+// Home.jsx
 import React from "react";
 import Service from "../components/Service";
 import Work from "../components/Work";
 import About from "../components/About";
 import Contact from "../components/Contact";
-import Footer from "../components/Footer";
 
-const Home = () => {
+const Home = ({ contactRef }) => {
   return (
     <div>
       <Service />
       <Work />
       <About />
-      <Contact/>
+      <section ref={contactRef}>
+        <Contact />
+      </section>
     </div>
   );
 };
