@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import { FaTimes, FaBars, FaCartArrowDown } from "react-icons/fa";
 import { IoLogIn } from "react-icons/io5";
 import { IoMdLogOut } from "react-icons/io";
-import { useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const NavBar = ({ onCartClick, onContactClick }) => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [subOpen, setSubOpen] = useState(false);
+  const [adminSubOpen, setAdminSubOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
@@ -41,9 +42,70 @@ const NavBar = ({ onCartClick, onContactClick }) => {
   const navItems = [
     { href: "/", label: "Home" },
     { href: "/about", label: "About" },
-    { href: "/projects", label: "Work" },
+    { label: "Work" },
     { isContact: true, label: "Contact" },
   ];
+
+  const adminItems = [
+    { href: "/admin/", label: "Dashboard" },
+    { href: "/admin/", label: "Manage Users" },
+    { href: "/admin", label: "Settings" },
+    { href: "/admin/create-project", label: "Add Project" },
+    { href: "/admin/add-ai", label: "Add AI Prompts" },
+  ];
+
+  const subWorksItems = [
+    { href: "/projects", label: "My Works" },
+    { href: "/ai-prompts", label: "Ai Prompts" },
+  ];
+
+  const AdminLinks = ({ isMobile, onClick }) => {
+    if (!user) return null;
+
+    if (user.role === "admin") {
+      return (
+        <li className="relative">
+          <button
+            onClick={() => setAdminSubOpen((prev) => !prev)}
+            className={`flex items-center justify-between w-full text-sm md:text-md text-black rounded-xl hover:bg-[var(--color-secondary)] p-2 hover:text-[var(--color-primary)] transition-colors duration-200 ${
+              isMobile ? "text-lg" : "gap-2"
+            }`}
+          >
+            Admin
+            <span
+              className={`ml-2 transform transition-transform ${
+                adminSubOpen ? "rotate-90" : ""
+              }`}
+            >
+              ▶
+            </span>
+          </button>
+          {adminSubOpen && (
+            <ul
+              className={`mt-2 ${
+                isMobile
+                  ? "flex flex-col"
+                  : "absolute bg-[var(--color-primary)] rounded-lg shadow-lg mt-2 w-40 border border-gray-200 z-50"
+              }`}
+            >
+              {adminItems.map((item) => (
+                <li key={item.label}>
+                  <a
+                    href={item.href}
+                    className="block w-full text-left text-sm md:text-md text-black rounded-lg hover:bg-[var(--color-secondary)] hover:text-[var(--color-primary)] px-3 py-2 transition-colors duration-200"
+                    onClick={isMobile ? onClick : undefined}
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </li>
+      );
+    }
+    return null;
+  };
 
   const NavLinks = ({ isMobile, onClick }) => (
     <ul
@@ -54,8 +116,49 @@ const NavBar = ({ onCartClick, onContactClick }) => {
       }`}
     >
       {navItems.map((item) => (
-        <li key={item.label}>
-          {item.isContact ? (
+        <li key={item.label} className="relative">
+          {item.label === "Work" ? (
+            <>
+              <button
+                onClick={() => setSubOpen((prev) => !prev)}
+                className={`flex items-center justify-between w-full text-sm md:text-md text-black rounded-xl hover:bg-[var(--color-secondary)] p-2 hover:text-[var(--color-primary)] transition-colors duration-200 ${
+                  isMobile ? "text-lg" : "gap-2"
+                }`}
+              >
+                {item.label}
+                <span
+                  className={`ml-2 transform transition-transform ${
+                    subOpen ? "rotate-90" : ""
+                  }`}
+                >
+                  ▶
+                </span>
+              </button>
+              {subOpen && (
+                <ul
+                  className={`mt-2 ${
+                    isMobile
+                      ? "flex flex-col"
+                      : "absolute bg-[var(--color-primary)] rounded-lg shadow-lg mt-2 w-28 border border-gray-200"
+                  }`}
+                >
+                  {subWorksItems.map((sub) => (
+                    <li key={sub.label}>
+                      <a
+                        href={sub.href}
+                        className={`block w-full text-left text-sm md:text-md text-black rounded-lg hover:bg-[var(--color-secondary)] hover:text-[var(--color-primary)] px-3 py-2 transition-colors duration-200 ${
+                          isMobile ? "text-lg" : ""
+                        }`}
+                        onClick={isMobile ? onClick : undefined}
+                      >
+                        {sub.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </>
+          ) : item.isContact ? (
             <button
               onClick={() => {
                 handleContactClick();
@@ -80,6 +183,9 @@ const NavBar = ({ onCartClick, onContactClick }) => {
           )}
         </li>
       ))}
+      {user && (user.role === "admin" ) && (
+        <AdminLinks isMobile={isMobile} onClick={onClick} />
+      )}
     </ul>
   );
 

@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { useCreateProjectMutation } from "../../redux/api/projectApi";
 import Project from "./Project";
 
