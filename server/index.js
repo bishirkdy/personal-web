@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import authRouter from '../server/routers/userRouter.js';
 import projectRouter from '../server/routers/projectRouter.js';
 import paymentRouter from '../server/routers/paymentRouter.js';
+import aiPromptsRouter from '../server/routers/aiProjectRouter.js';
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -30,6 +31,7 @@ app.use(cookieParser())
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/projects', projectRouter);
 app.use('/api/v1/payment', paymentRouter);
+app.use('/api/v1/ai', aiPromptsRouter);
 connectDB()
 
 process.on("unhandledRejection", (err) => {

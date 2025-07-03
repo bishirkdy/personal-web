@@ -121,7 +121,7 @@ export const deleteProject = async (req, res, next) => {
     await cloudinary.uploader.destroy(imgPublicId, { resource_type: "image" });
     await cloudinary.uploader.destroy(zipPublicId, { resource_type: "raw" });
 
-    await Project.findByIdAndDelete(_id); // ✅ instead of project.remove()
+    await Project.findByIdAndDelete(_id);
 
     res.status(200).json({ message: "Project deleted successfully" });
   } catch (error) {
