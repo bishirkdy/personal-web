@@ -26,17 +26,18 @@ const router = createBrowserRouter(
       <Route path="verify-account" element={<VerifyAccount />} />
 
       <Route element={<Layout />}>
-        <Route path="update-project/:_id" element={<UpdateProject />} />
         <Route path="/" element={<App />} />
-        <Route path="payment" element={<PaymentPage />} />
-
         <Route element={<Authenticate />}>
           <Route path="projects" element={<MyWork />} />
+          <Route path="payment" element={<PaymentPage />} />
+
           <Route path="ai-prompts" element={<AiPrompt />} />
           <Route path="projects/:id" element={<SpecifiedProject />} />
 
           <Route path="admin" element={<Admin />}>
             <Route path="create-project" element={<CreateProject />} />
+            <Route path="update-project/:_id" element={<UpdateProject />} />
+
             <Route path="add-ai" element={<AddAiPrompts />} />
           </Route>
         </Route>

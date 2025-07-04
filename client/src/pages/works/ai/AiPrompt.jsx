@@ -1,87 +1,76 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { IoFilterSharp } from "react-icons/io5";
 import { IoMdSearch } from "react-icons/io";
 import { useSearchParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { useGetAllProjectQuery } from "../../../redux/api/projectApi";
+import { useGetAiProjectQuery } from "../../../redux/api/aiProjectApi";
+import { useDeleteAiPromptMutation } from "../../../redux/api/aiProjectApi";
 import { FaCopy } from "react-icons/fa";
+import { useSelector } from "react-redux";
+import { MdDeleteForever } from "react-icons/md";
 
-// const software = [
-//   "illustration",
-//   "photoshop",
-//   "indesign",
-//   "premier",
-//   "figma",
-//   "code",
-// ];
 const AiPrompt = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState(searchParams.get("q" || ""));
-//   const [selectedSoftware, setSelectedSoftware] = useState(
-//     searchParams.get("software" || "")
-//   );
-  const [selectedCategories, setSelectedCategories] = useState(
-    searchParams.getAll("category")
+  const [selectedSoftware, setSelectedSoftware] = useState(
+    searchParams.get("software" || "")
   );
 
   const [filterActive, setFilterActive] = useState(false);
-  const { data, error, isLoading } = useGetAllProjectQuery();
-  const allCategories = data?.project
-    ? Array.from(new Set(data.project.map((p) => p.category).filter(Boolean)))
+  const { data, error, isLoading , refetch } = useGetAiProjectQuery();
+  const [deleteAiPrompt, { isLoading: deleteLoading, isError: deleteError }] =
+    useDeleteAiPromptMutation();
+  const { user } = useSelector((state) => state.auth);
+  const isAdmin = user?.role === "admin";
+
+  const allProject = data?.data
+    ? Array.from(new Set(data.data.map((d) => d.software).filter(Boolean)))
     : [];
 
-  const navigate = useNavigate();
-  const updateSearchParams = (term, categories, software) => {
+  const updateSearchParams = (term, software) => {
     const params = new URLSearchParams();
     if (term) params.set("q", term);
     if (software) params.set("software", software);
-    categories.forEach((cat) => params.append("category", cat));
     setSearchParams(params);
   };
 
   const handleSearchChange = (e) => {
     const term = e.target.value;
     setSearchTerm(term);
-    updateSearchParams(term, selectedCategories, selectedSoftware);
+    updateSearchParams(term, selectedSoftware);
   };
 
-  const filteredProjects = data?.project?.filter((project) => {
-    const categoryMatch =
-      selectedCategories.length === 0 ||
-      selectedCategories.includes(project.category);
-
-    // const softwareMatch =
-    //   !selectedSoftware || project.software === selectedSoftware;
+  const filteredProjects = data?.data?.filter((d) => {
+    const softwareMatch = !selectedSoftware || d.software === selectedSoftware;
 
     const searchMatch =
       !searchTerm ||
-      (project.name &&
-        project.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      (project.description &&
-        project.description.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      (project.price && project.price.toString().includes(searchTerm)) ||
-      (project.offerPrice &&
-        project.offerPrice.toString().includes(searchTerm));
+      d.software.toLowerCase().includes(searchTerm.toLowerCase());
 
-    return categoryMatch && searchMatch;
+    return softwareMatch && searchMatch;
   });
+  const uniqueSoftwares = Array.from(
+    new Set(data?.data.map((item) => item.software))
+  );
 
-  const handleCategoryChange = (category) => {
-    const updatedCategories = selectedCategories.includes(category)
-      ? selectedCategories.filter((c) => c !== category)
-      : [...selectedCategories, category];
-
-    setSelectedCategories(updatedCategories);
-    updateSearchParams(searchTerm, updatedCategories, selectedSoftware);
-  };
   const handleSoftwareChange = (soft) => {
     setSelectedSoftware(soft);
-    updateSearchParams(searchTerm, selectedCategories, soft);
+    updateSearchParams(searchTerm, soft);
   };
+
   const handleFilterBtn = () => {
     setFilterActive(!filterActive);
   };
 
+  const handleDeletePrompt = async (_id) => {
+    try {
+      await deleteAiPrompt(_id).unwrap();
+      alert("Prompt deleted successfully!");
+      refetch();
+    } catch (error) {
+      console.error("Failed to delete prompt:", error);
+      alert("Failed to delete prompt. Please try again.");
+    }
+  };
   return (
     <div className="min-h-screen flex flex-col bg-[var(--color-primary)]">
       <div className="w-full bg-[var(--color-primary)]">
@@ -110,40 +99,14 @@ const AiPrompt = () => {
 
       <div className="flex-1 w-full bg-[var(--color-primary)] py-4 px-4 md:px-8 lg:px-32 pb-16">
         <div className="flex flex-col md:flex-row gap-8 max-w-7xl mx-auto">
-          {/* <aside
+          <aside
             className={`${
               filterActive ? "block" : "hidden"
             } w-full md:w-1/4 bg-white p-6 rounded-2xl shadow-lg transition-all duration-200`}
           >
-            <div className="mb-6">
-              <h2 className="text-xl font-semibold text-gray-800 mb-3">
-                Categories
-              </h2>
-              <hr className="border-gray-200 mb-4" />
-              <div className="flex flex-col gap-3">
-                {allCategories.map((category, index) => (
-                  <label
-                    key={index}
-                    className="flex items-center gap-3 text-sm text-gray-700 hover:text-gray-900 transition-all cursor-pointer"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={selectedCategories.includes(category)}
-                      onChange={() => handleCategoryChange(category)}
-                      className="accent-[var(--color-secondary)] w-4 h-4"
-                    />
-                    <span>{category}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
             <div>
-              <h2 className="text-xl font-semibold text-gray-800 mb-3">
-                Tools
-              </h2>
-              {/* <hr className="border-gray-200 mb-4" /> */}
-              {/* <div className="flex flex-col gap-3">
-                {software.map((soft, index) => (
+              <div className="flex flex-col gap-3">
+                {uniqueSoftwares.map((soft, index) => (
                   <label
                     key={index}
                     className="flex items-center gap-3 text-sm text-gray-700 hover:text-gray-900 transition-all cursor-pointer"
@@ -162,25 +125,24 @@ const AiPrompt = () => {
                   className="text-xs text-gray-400 mt-2 underline hover:text-[var(--color-secondary)]"
                   onClick={() => {
                     setSelectedSoftware("");
-                    updateSearchParams(searchTerm, selectedCategories, "");
+                    updateSearchParams(searchTerm, "");
                   }}
                   type="button"
                 >
                   Clear tool
                 </button>
-              </div> */}
-            {/* </div>
-          </aside>  */}
-
+              </div>
+            </div>
+          </aside>
 
           <main className={`w-full ${filterActive ? "md:w-3/4" : "w-full"}`}>
             {isLoading ? (
               <div className="flex items-center justify-center min-h-[200px]">
-                <span className="text-gray-500">Loading projects...</span>
+                <span className="text-gray-500">Loading prompts...</span>
               </div>
             ) : error ? (
               <div className="flex items-center justify-center min-h-[200px]">
-                <span className="text-red-500">Failed to load projects.</span>
+                <span className="text-red-500">Failed to load ai prompts.</span>
               </div>
             ) : (
               <div
@@ -191,40 +153,42 @@ const AiPrompt = () => {
                 } gap-6`}
               >
                 {filteredProjects && filteredProjects.length > 0 ? (
-                  filteredProjects.map((project) => (
+                  filteredProjects.map((prompt) => (
                     <div
-                      key={project._id}
-                      onClick={() => navigate(`/projects/${project._id}`)}
-                      className="bg-white rounded-xl shadow-lg overflow-hidden transition-transform hover:scale-[1.02] flex flex-col"
+                      key={prompt._id}
+                      className="bg-white relative rounded-xl shadow-lg overflow-hidden transition-transform hover:scale-[1.02] flex flex-col"
                     >
                       <div className="w-full aspect-square bg-gray-100 flex items-center justify-center">
                         <img
-                          src={project.image}
-                          alt={project.title || project.id}
+                          src={prompt.image}
+                          alt={prompt._id}
                           loading="Loading"
                           className="w-full h-full object-cover object-center"
                           style={{ aspectRatio: "1 / 1" }}
                         />
                       </div>
                       <div className="p-4">
- 
                         <div className="flex flex-row  flex-wrap gap-2 mt-2">
-                          {project.category && (
-                            <span className="bg-[var(--color-primary-light,#e0e7ff)] text-xs rounded-lg px-2 py-1 text-[var(--color-secondary)] font-medium">
-                              {project.category}
-                            </span>
-                          )}
-                            <button className="flex gap-2 items-center cursor-pointer hover:bg-white hover:text-[var(--color-secondary)] bg-[var(--color-secondary)] text-xs rounded-lg px-2 py-1 text-white font-medium">
-                                <FaCopy/>
-                                Copy Prompt
-                            </button>
+                          <span className="bg-[var(--color-primary-light,#e0e7ff)] text-xs rounded-lg px-2 py-1 text-[var(--color-secondary)] font-medium">
+                            {prompt.software}
+                          </span>
+                          <button className="flex gap-2 items-center cursor-pointer hover:bg-white hover:text-[var(--color-secondary)] bg-[var(--color-secondary)] text-xs rounded-lg px-2 py-1 text-white font-medium">
+                            <FaCopy />
+                            Copy Prompt
+                          </button>
                         </div>
                       </div>
+                      {isAdmin && (
+                        <MdDeleteForever
+                          onClick={() => handleDeletePrompt(prompt._id)}
+                          className="absolute right-2 top-2 text-2xl text-red-500 hover:scale-105 cursor-pointer hover:text-red-800"
+                        />
+                      )}
                     </div>
                   ))
                 ) : (
                   <div className="col-span-full flex items-center justify-center min-h-[200px]">
-                    <span className="text-gray-400">No projects found.</span>
+                    <span className="text-gray-400">No prompt found.</span>
                   </div>
                 )}
               </div>

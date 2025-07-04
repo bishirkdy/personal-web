@@ -1,29 +1,42 @@
 import React, { useState } from "react";
+import { useAddAiPromptMutation } from "../../../redux/api/aiProjectApi";
 
 const AddAiPrompts = () => {
   const [image, setImage] = useState(null);
   const [software, setSoftware] = useState("");
   const [prompt, setPrompt] = useState("");
 
+  const [addAiPrompt, { isLoading, isError }] = useAddAiPromptMutation();
+  if (isLoading) {
+    return (
+      <div className="text-center text-lg font-semibold">Adding Prompt...</div>
+    );
+  }
   const handleImageChange = (e) => {
     setImage(e.target.files[0]);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    const formData = new FormData();
+    formData.append("ai-image", image);
+    formData.append("software", software); 
+    formData.append("prompt", prompt);
 
-    console.log("Image:", image);
-    console.log("Software:", software);
-    console.log("Prompt:", prompt);
-
-    setImage(null);
-    setSoftware("");
-    setPrompt("");
-    alert("Prompt added!");
+    try {
+      await addAiPrompt(formData).unwrap();
+      setImage(null);
+      setSoftware("");
+      setPrompt("");
+      alert("Prompt added!");
+    } catch (error) {
+      console.error("Failed to add prompt:", error);
+      alert("Failed to add prompt. Please try again.");
+    }
   };
 
   return (
-    <div className="w-full bg-[var(--color-primary)] flex items-center py-10 justify-center">
+    <div className="w-full bg-[var(--color-primary)] flex items-center pb-10 justify-center">
       <div className="max-w-xl mx-auto mt-10 p-6 rounded-xl shadow-lg bg-white border border-gray-200">
         <h2 className="text-2xl font-bold mb-6 text-center text-black">
           Add New AI Prompt
@@ -45,24 +58,23 @@ const AddAiPrompts = () => {
             )}
           </div>
 
-          
-            <input
-              type="text"
-              value={software}
-              onChange={(e) => setSoftware(e.target.value)}
-              placeholder="Enter software name"
-              className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-[var(--color-secondary)]"
-              required
-            />
+          <input
+            type="text"
+            value={software}
+            onChange={(e) => setSoftware(e.target.value)}
+            placeholder="Enter software name"
+            className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-[var(--color-secondary)]"
+            required
+          />
 
-            <textarea
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-              placeholder="Enter the AI prompt"
-              className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-[var(--color-secondary)]"
-              rows={10}
-              required
-            />
+          <textarea
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            placeholder="Enter the AI prompt"
+            className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-[var(--color-secondary)]"
+            rows={10}
+            required
+          />
 
           <button
             type="submit"
