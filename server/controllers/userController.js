@@ -145,3 +145,82 @@ export const resendOtp = async (req, res, next) => {
     next(new CustomError("Failed to resend OTP", 500));
   }
 };
+
+export const getUser = async (req , res, next) => {
+  try {
+    const user = await User.find()
+      .select("-password -otp -otpExpiry -otpCreatedAt")
+      .sort({ createdAt: -1 });
+    if (!user) {
+      return next(new CustomError("No users found", 404));
+    }
+    res.status(200).json({
+      message: "Users retrieved successfully",
+      data: user,
+    });
+  } catch (error) {
+    next(new CustomError("Failed to get user", 500));
+  }
+}
+
+export const editUser = async (req, res, next) => {
+  const { _id } = req.params;
+
+  try {
+    if (!_id) {
+      return next(new CustomError("User ID is required", 400));    
+    }
+
+    const { name, email, role } = req.body;
+
+    const updateData = {};
+    if (name !== undefined) updateData.name = name;
+    if (email !== undefined) updateData.email = email;
+    if (role !== undefined) updateData.role = role;
+
+    const user = await User.findByIdAndUpdate(
+      _id,
+      updateData,
+      { new: true, runValidators: true }
+    );
+
+    if (!user) {
+      return next(new CustomError("User not found", 404));
+    }
+
+    res.status(200).json({
+      message: "User updated successfully",
+      data: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role
+      },
+    });
+  } catch (error) {
+    next(new CustomError("Failed to edit user", 500));
+  }
+};
+
+export const deleteUser = async (req, res, next) => {
+  const { _id } = req.body;
+
+  try {
+    if (!_id) {
+      return next(new CustomError("User ID is required", 400));
+    }
+
+    const user = await User.findByIdAndDelete(_id);
+
+    if (!user) {
+      return next(new CustomError("User not found", 404));
+    }
+
+    res.status(200).json({
+      message: "User deleted successfully",
+      data: { id: user._id },
+    });
+  } catch (error) {
+    next(new CustomError("Failed to delete user", 500));
+  }
+};

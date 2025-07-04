@@ -47,9 +47,9 @@ const NavBar = ({ onCartClick, onContactClick }) => {
   ];
 
   const adminItems = [
-    { href: "/admin/", label: "Dashboard" },
-    { href: "/admin/", label: "Manage Users" },
-    { href: "/admin", label: "Settings" },
+    // { href: "/admin/", label: "Dashboard" },
+    { href: "/admin/users", label: "Manage Users" },
+    // { href: "/admin", label: "Settings" },
     { href: "/admin/create-project", label: "Add Project" },
     { href: "/admin/add-ai", label: "Add AI Prompts" },
   ];

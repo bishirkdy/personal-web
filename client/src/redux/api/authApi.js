@@ -23,14 +23,35 @@ const authApi = createApiSlice.injectEndpoints({
                 method:'POST',
                 body:data
             })
-        }),resendOTP : builder.mutation({
+        }),
+        resendOTP : builder.mutation({
             query:(data)=>({
                 url:`${AUTH_URL}/resend-otp`,
                 method:'POST',
                 body:data
             })
+        }),
+        getUsers : builder.query({
+            query : () => ({
+                url : `${AUTH_URL}/users`,
+                method : 'GET'
+            })
+        }),
+        editUser : builder.mutation({
+            query : ({_id , ...data}) => ({
+                url : `${AUTH_URL}/update-user/${_id}`,
+                method : 'PATCH',
+                body : data
+            })
+        }),
+        deleteUser : builder.mutation({
+            query : (_id) => ({
+                url : `${AUTH_URL}/delete-user`,
+                method : 'DELETE',
+                body : {_id}
+            })
         })
     })
 })
 
-export const {useRegisterMutation , useLoginMutation , useVerifyMutation , useResendOTPMutation} = authApi
+export const {useRegisterMutation , useLoginMutation , useVerifyMutation , useResendOTPMutation , useGetUsersQuery , useDeleteUserMutation , useEditUserMutation} = authApi

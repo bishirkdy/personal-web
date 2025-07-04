@@ -17,6 +17,7 @@ import AiPrompt from "./pages/works/ai/AiPrompt";
 import Admin from "./pages/admin/Admin";
 import AddAiPrompts from "./pages/admin/ai/AddAiPrompts";
 import CreateProject from "./pages/admin/CreateProject";
+import User from "./pages/admin/users/User";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -39,6 +40,8 @@ const router = createBrowserRouter(
             <Route path="update-project/:_id" element={<UpdateProject />} />
 
             <Route path="add-ai" element={<AddAiPrompts />} />
+
+            <Route path="users" element={<User/>} />
           </Route>
         </Route>
       </Route>
