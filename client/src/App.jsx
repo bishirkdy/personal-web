@@ -1,7 +1,6 @@
 // App.jsx
 import React, { useEffect } from "react";
 import { useLocation, useOutletContext } from "react-router-dom";
-import Header from "./components/Header";
 import Home from "./pages/Home";
 
 const App = () => {
@@ -19,7 +18,6 @@ const App = () => {
 
   return (
     <>
-      <Header />
       <Home contactRef={contactRef} />
     </>
   );
