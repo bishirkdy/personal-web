@@ -10,18 +10,13 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 import { connectDB } from './db/mongoDB.js';
+const allowedOrigin = process.env.ALLOWED_ORIGIN;
+
 app.use(cors({
-    origin : (origin , cb) =>{
-        const allowedOrigin = process.env.ALLOWED_ORIGIN;
-        if(allowedOrigin.includes(origin) || !origin){
-            cb(null, true);
-        } else {
-            cb(new Error('Not allowed by CORS'));
-        }
-    },
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-    credentials: true,
-    optionsSuccessStatus: 200,
+  origin: allowedOrigin,
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+  optionsSuccessStatus: 200,
 }));
 
 app.use(express.json());
