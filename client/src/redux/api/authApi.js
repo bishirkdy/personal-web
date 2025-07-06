@@ -34,7 +34,7 @@ const authApi = createApiSlice.injectEndpoints({
         getUsers : builder.query({
             query : () => ({
                 url : `${AUTH_URL}/users`,
-                method : 'GET'
+                method : 'GET',
             })
         }),
         editUser : builder.mutation({

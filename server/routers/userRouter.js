@@ -8,7 +8,7 @@ router.post('/register' , registerUser)
 router.post('/verify-user' , verifyMail)
 router.post('/resend-otp' , resendOtp)
 router.post('/login' , loginUser)
-router.get('/users' , authenticateUser , authorizeAdmin , getUser)
+router.get('/users'  , authenticateUser , authorizeAdmin, getUser)
 router.patch('/update-user/:id' , authenticateUser , authorizeAdmin , editUser )
 router.delete('/delete-user' , authenticateUser , authorizeAdmin , deleteUser )
 

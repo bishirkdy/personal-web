@@ -10,6 +10,6 @@ router.get('/get-all-project'  , getAllProject  )
 router.get('/project-details/:id' , projectDetail )
 router.put('/update-project/:_id' , uploadProjectFiles , updateProject)
 router.delete('/delete-project/:_id' , deleteProject)
-router.get('/top-six-project' , getTopSixProject)
+router.get('/top-six-project'  ,  getTopSixProject)
 
 export default router;
