@@ -1,9 +1,9 @@
-import graphic from "../assets/graphic.jpeg";
-import webDesign from "../assets/webDesign.jpeg";
+import graphic from "../assets/graphic.jpg";
+import webDesign from "../assets/webDesign.png";
 import dev from "../assets/dev.jpeg";
-import webSolution from "../assets/webSolution.jpeg";
-import ux from "../assets/ux.jpeg";
-import video from "../assets/video.jpeg";
+import webSolution from "../assets/webSolution.avif";
+import ux from "../assets/ux.jpg";
+import video from "../assets/video.jpg";
 import { useState } from "react";
 
 const services = [
