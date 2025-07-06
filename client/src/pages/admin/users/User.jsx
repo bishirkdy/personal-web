@@ -9,9 +9,14 @@ export default function User() {
     if (isLoading) {
         return <div className="text-center text-gray-500">Loading...</div>;
     }
+     if (error) {
+      console.log(error);
+      }
     if (error) {
         return <div className="text-center text-red-500">Error loading users: {error.message}</div>;
     }
+    console.log("user is" , users);
+   
     const deleteHandler = async (_id) => {
         try {
             await deleteUser(_id).unwrap();
@@ -27,7 +32,7 @@ export default function User() {
                user.role.toLowerCase().includes(searchTerm.toLowerCase());
     })
   return (
-    <div className="flex items-center justify-center min-h-screen bg-[var(--color-primary)] px-2 py-6">
+    <div className="flex items-center justify-center pt-20 min-h-screen bg-[var(--color-primary)] px-2 py-6">
       <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg overflow-hidden">
         <div className="px-6 py-4 border-b">
           <h2 className="text-2xl font-bold text-gray-800">Manage Users</h2>
