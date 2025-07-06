@@ -10,10 +10,10 @@ import { addToCart } from "../../redux/features/cartSlice";
 const SpecifiedProject = () => {
   const { id } = useParams();
   console.log(id);
-  
+
   const { data, isLoading, error } = useProjectDetailsQuery(id);
   console.log(data);
-  
+
   const [deleteData, { isLoading: deleteLoading, isError: deleteError }] =
     useDeleteProjectMutation();
   const { user } = useSelector((state) => state.auth);
@@ -24,7 +24,7 @@ const SpecifiedProject = () => {
 
   const selectedData = data?.data;
   console.log(selectedData);
-  
+
   if (!selectedData) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] px-4 text-center">
@@ -42,14 +42,15 @@ const SpecifiedProject = () => {
     navigate("/projects");
   };
   const addToCartHandler = async () => {
-    await dispatch(addToCart({projects : selectedData}))
-    navigate("/projects")
-  }
+    await dispatch(addToCart({ projects: selectedData }));
+    navigate("/projects");
+  };
 
   return (
-    <div className="min-h-screen bg-[var(--color-primary)] px-4 py-10 flex justify-center">
-      <div className="w-full max-w-4xl bg-white shadow-lg rounded-3xl overflow-hidden">
-        <div className="w-full aspect-square overflow-hidden">
+    <div className="min-h-screen bg-[var(--color-primary)] px-4 pb-10 pt-30 flex justify-center items-start">
+      <div className="w-full max-w-4xl bg-white shadow-xl rounded-3xl overflow-hidden transition-all duration-500">
+        {/* Image header */}
+        <div className="w-full aspect-video bg-gray-100 overflow-hidden">
           <img
             src={selectedData.image}
             alt={selectedData.name}
@@ -57,17 +58,18 @@ const SpecifiedProject = () => {
           />
         </div>
 
-        <div className="p-6 sm:p-10">
-          <h1 className="text-3xl font-extrabold text-gray-900 mb-4">
+        {/* Content */}
+        <div className="p-6 sm:p-10 space-y-6">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900">
             {selectedData.name}
           </h1>
 
-          <p className="text-gray-700 text-base sm:text-md leading-relaxed mb-6">
+          <p className="text-gray-700 text-base sm:text-lg leading-relaxed">
             {selectedData.description ||
               `This project combines creativity and modern tools to deliver an outstanding user experience. Ideal for portfolios, real-world learning, or customization.`}
           </p>
 
-          <div className="flex flex-wrap gap-3 mb-6">
+          <div className="flex flex-wrap gap-3">
             <span className="bg-blue-100 text-blue-800 px-4 py-1 rounded-full text-sm font-medium">
               Category: {selectedData.category}
             </span>
@@ -80,25 +82,27 @@ const SpecifiedProject = () => {
           </div>
 
           {isAdmin ? (
-            <div className="flex gap-4 mt-6">
+            <div className="flex flex-wrap gap-4 pt-4 border-t border-gray-200">
               <button
                 onClick={() => navigate(`/update-project/${selectedData._id}`)}
-                className="px-6 py-3 bg-[var(--color-secondary)] text-white font-semibold rounded-lg hover:bg-blue-900 cursor-pointer transition"
+                className="flex-1 min-w-[120px] px-6 py-3 bg-[var(--color-secondary)] text-white font-semibold rounded-lg hover:bg-blue-900 transition"
               >
                 Update
               </button>
 
               <button
                 onClick={handleDelete}
-                className="px-6 py-3 bg-red-500 text-white font-semibold border cursor-pointer border-gray-300 rounded-lg hover:bg-red-900 transition"
+                className="flex-1 min-w-[120px] px-6 py-3 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-700 transition"
               >
                 Delete
               </button>
             </div>
           ) : (
-            <div className="flex gap-4 mt-6">
-              <button onClick={addToCartHandler} 
-              className="px-6 py-3 bg-[var(--color-secondary)] text-white font-semibold rounded-lg hover:bg-blue-900 cursor-pointer transition">
+            <div className="flex pt-4 border-t border-gray-200">
+              <button
+                onClick={addToCartHandler}
+                className="w-full px-6 py-3 bg-[var(--color-secondary)] text-white font-semibold rounded-lg hover:bg-blue-900 transition"
+              >
                 Add To Cart
               </button>
             </div>

@@ -13,7 +13,7 @@ const Cart = ({ open, onClose, cartItems = { items: [], totalPrice: 0 } }) => {
   return (
     <>
       <div
-        className={`fixed inset-0 z-40 bg-opacity-50 transition-opacity duration-300 ${
+        className={`fixed inset-0 z-40 bg-opacity-50 transition-opacity duration-1000 ${
           open
             ? "opacity-100 pointer-events-auto"
             : "opacity-0 pointer-events-none"
@@ -105,7 +105,7 @@ const Cart = ({ open, onClose, cartItems = { items: [], totalPrice: 0 } }) => {
             className={`w-full bg-[var(--color-secondary)] text-white py-2 rounded-lg font-semibold border border-[var(--color-secondary)] transition ${
               isEmpty
                 ? "opacity-50 cursor-not-allowed"
-                : "hover:bg-white hover:text-[var(--color-secondary)]"
+                : "hover:bg-white cursor-pointer hover:text-[var(--color-secondary)]"
             }`}
             disabled={isEmpty}
           >

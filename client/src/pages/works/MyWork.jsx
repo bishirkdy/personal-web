@@ -83,9 +83,9 @@ const MyWork = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[var(--color-primary)]">
+    <div className="min-h-screen pt-16  flex flex-col bg-[var(--color-primary)]">
       <div className="w-full bg-[var(--color-primary)]">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4 bg-[var(--color-primary)] py-4 px-4 md:px-8 lg:px-32">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 bg-[var(--color-primary)] py-4 px-4 md:px-8 lg:px-28">
           <button
             onClick={handleFilterBtn}
             className="flex flex-row items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer md:w-1/4 w-full"
@@ -108,7 +108,7 @@ const MyWork = () => {
         </div>
       </div>
 
-      <div className="flex-1 w-full bg-[var(--color-primary)] py-4 px-4 md:px-8 lg:px-32 pb-16">
+      <div className="flex-1 w-full bg-[var(--color-primary)] py-4 px-4 md:px-8 lg:px-28 pb-16">
         <div className="flex flex-col md:flex-row gap-8 max-w-7xl mx-auto">
           <aside
             className={`${
@@ -172,7 +172,11 @@ const MyWork = () => {
             </div>
           </aside>
 
-          <main className={`w-full ${filterActive ? "md:w-3/4" : "w-full"}`}>
+          <main
+            className={`w-full ${
+              filterActive ? "md:w-3/4" : "w-full"
+            }`}
+          >
             {isLoading ? (
               <div className="flex items-center justify-center min-h-[200px]">
                 <span className="text-gray-500">Loading projects...</span>
@@ -183,43 +187,48 @@ const MyWork = () => {
               </div>
             ) : (
               <div
-                className={`grid grid-cols-1 ${
-                  filterActive
-                    ? "sm:grid-cols-2 lg:grid-cols-3"
-                    : "sm:grid-cols-2 lg:grid-cols-4"
-                } gap-6`}
+                className={`grid gap-6 grid-cols-1
+        ${
+          filterActive
+            ? "sm:grid-cols-2 lg:grid-cols-3"
+            : "sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+        }`}
               >
                 {filteredProjects && filteredProjects.length > 0 ? (
                   filteredProjects.map((project) => (
                     <div
                       key={project._id}
                       onClick={() => navigate(`/projects/${project._id}`)}
-                      className="bg-white rounded-xl shadow-lg overflow-hidden transition-transform hover:scale-[1.02] flex flex-col"
+                      className="bg-white rounded-xl shadow hover:scale-[1.02] transition-transform cursor-pointer flex flex-col overflow-hidden group"
                     >
-                      <div className="w-full aspect-square bg-gray-100 flex items-center justify-center">
+                      {/* 16:9 Thumbnail */}
+                      <div className="relative w-full aspect-video overflow-hidden bg-gray-100">
                         <img
                           src={project.image}
                           alt={project.title || project.id}
-                          loading="Loading"
-                          className="w-full h-full object-cover object-center"
-                          style={{ aspectRatio: "1 / 1" }}
+                          loading="lazy"
+                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                         />
+                        {/* Optional subtle overlay on hover */}
+                        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                       </div>
-                      <div className="p-4">
+
+                      {/* Content below thumbnail */}
+                      <div className="p-3 space-y-1 flex flex-col">
                         <h3 className="text-sm font-semibold text-gray-800 truncate">
                           {project.name}
                         </h3>
-                        <p className="text-sm text-gray-500 truncate">
+                        <p className="text-xs text-gray-500 truncate">
                           {project.description}
                         </p>
-                        <div className="flex flex-row flex-wrap gap-2 mt-2">
+                        <div className="flex flex-wrap gap-1 mt-1">
                           {project.category && (
-                            <span className="bg-[var(--color-primary-light,#e0e7ff)] text-xs rounded-full px-2 py-1 text-[var(--color-secondary)] font-medium">
+                            <span className="bg-[var(--color-primary-light,#e0e7ff)] text-xs rounded-full px-2 py-0.5 text-[var(--color-secondary)]">
                               {project.category}
                             </span>
                           )}
                           {project.software && (
-                            <span className="bg-gray-100 text-xs rounded-full px-2 py-1 text-gray-500 font-medium">
+                            <span className="bg-gray-100 text-xs rounded-full px-2 py-0.5 text-gray-500">
                               {project.software}
                             </span>
                           )}

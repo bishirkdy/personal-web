@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useGetTopSixProjectQuery } from "../redux/api/projectApi";
 import { FaArrowRightToBracket } from "react-icons/fa6";
-
+import { useNavigate } from "react-router";
 const Work = () => {
+  const navigate = useNavigate();
   const { data, isLoading, error } = useGetTopSixProjectQuery();
   const isMobile = window.innerWidth <= 768;
   if (isLoading) {
@@ -17,7 +18,8 @@ const Work = () => {
 
   return (
     <div className="bg-[var(--color-primary)] pt-10 px:4 lg:px-28 flex flex-col items-center justify-center">
-        <div className="relative flex items-center justify-center gap-4 w-full mb-10 px-4 group">
+        <div onClick={() => navigate("/projects")}
+         className="cursor-pointer relative flex items-center justify-center gap-4 w-full mb-10 px-4 group">
               <h1 className="lg:text-4xl md:text-3xl text-xl font-bold text-nowrap">
                 PROJECTS
               </h1>

@@ -4,6 +4,7 @@ import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import Cart from "./pages/cart/Cart";
 import { useSelector } from "react-redux";
+import ScrollToTop from "./components/ScrollToTop";
 
 const Layout = () => {
   const [cartOpen, setCartOpen] = useState(false);
@@ -17,6 +18,7 @@ const Layout = () => {
 
   return (
     <div>
+      <ScrollToTop/>
       <NavBar onCartClick={() => setCartOpen(true)} onContactClick={scrollToContact} />
       <Cart
         open={cartOpen}

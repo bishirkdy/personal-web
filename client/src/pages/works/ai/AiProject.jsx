@@ -1,11 +1,11 @@
 import { useGetTopSixAiProjectsQuery } from "../../../redux/api/aiProjectApi";
 import { FaArrowRightToBracket } from "react-icons/fa6";
+import { useNavigate } from "react-router";
 
 const AiProject = () => {
   const isMobile = window.innerWidth <= 768;
   const { data, isLoading, error } = useGetTopSixAiProjectsQuery();
-  console.log(data);
-
+  const navigate = useNavigate();
   if (isLoading) {
     return <h2 className="text-center pt-10">Loading...</h2>;
   }
@@ -18,7 +18,8 @@ const AiProject = () => {
 
   return (
     <div className="bg-[var(--color-primary)] pt-10 px:4 lg:px-28 flex flex-col">
-      <div className="relative flex items-center justify-center gap-4 w-full mb-12 px-4 group">
+      <div onClick={() => navigate("/ai-prompts")}
+       className="cursor-pointer relative flex items-center justify-center gap-4 w-full mb-12 px-4 group">
         <h1 className="lg:text-4xl md:text-3xl text-xl font-bold text-nowrap">
           AI WORKS
         </h1>
