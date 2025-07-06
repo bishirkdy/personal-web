@@ -7,6 +7,7 @@ import projectRouter from '../server/routers/projectRouter.js';
 import paymentRouter from '../server/routers/paymentRouter.js';
 import aiPromptsRouter from '../server/routers/aiProjectRouter.js';
 const app = express();
+app.set('trust proxy', 1)
 const PORT = process.env.PORT || 3000;
 
 import { connectDB } from './db/mongoDB.js';
