@@ -53,3 +53,11 @@ body {
   color: #333;
   background-color: #f8f9fa;
 }
+@keyframes slideUp {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(-6px); opacity: 1; }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.5s forwards;
+}

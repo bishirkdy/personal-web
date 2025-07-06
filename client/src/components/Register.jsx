@@ -53,7 +53,7 @@ const Register = () => {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Enter your name"
-                className="w-full pl-10 pr-4 py-3 rounded-lg bg-white bg-opacity-20 placeholder-gray-400 text-[var(--color-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-secondary)] focus:bg-opacity-30 transition"
+                className="w-full pl-10 rounded-lg pr-4 py-3 bg-transparent border-0 border-b-2 placeholder-gray-400 text-[var(--color-secondary)] outline-none transition"
                 aria-label="Name"
               />
             </div>
@@ -71,7 +71,7 @@ const Register = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
-                className="w-full pl-10 pr-4 py-3 rounded-lg bg-white bg-opacity-20 placeholder-gray-400 text-[var(--color-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-secondary)] focus:bg-opacity-30 transition"
+                className="w-full pl-10 rounded-lg pr-4 py-3 bg-transparent border-0 border-b-2 placeholder-gray-400 text-[var(--color-secondary)] outline-none transition"
                 aria-label="Email address"
               />
             </div>
@@ -90,7 +90,7 @@ const Register = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password"
                 minLength={8}
-                className="w-full pl-10 pr-4 py-3 rounded-lg bg-white bg-opacity-20 placeholder-gray-400 text-[var(--color-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-secondary)] focus:bg-opacity-30 transition"
+                className="w-full pl-10 rounded-lg pr-4 py-3 bg-transparent border-0 border-b-2 placeholder-gray-400 text-[var(--color-secondary)] outline-none transition"
                 aria-label="Password"
               />
             </div>
@@ -109,7 +109,7 @@ const Register = () => {
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="Confirm your password"
                 minLength={8}
-                className="w-full pl-10 pr-4 py-3 rounded-lg bg-white bg-opacity-20 placeholder-gray-400 text-[var(--color-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-secondary)] focus:bg-opacity-30 transition"
+                className="w-full pl-10 rounded-lg pr-4 py-3 bg-transparent border-0 border-b-2 placeholder-gray-400 text-[var(--color-secondary)] outline-none transition"
                 aria-label="Confirm Password"
               />
             </div>
@@ -117,7 +117,7 @@ const Register = () => {
 
           <button
             type="submit"
-            className="w-full py-3 rounded-lg bg-[var(--color-secondary)] hover:to-indigo-700 text-white font-bold text-lg shadow-md transition transform hover:-translate-y-1 focus:outline-none focus:ring-4 focus:ring-purple-500"
+            className="w-full py-3 rounded-lg bg-[var(--color-secondary)] cursor-pointer text-white font-bold text-lg shadow hover:bg-[var(--color-primary)] hover:text-[var(--color-secondary)] border border-transparent hover:border-[var(--color-secondary)] transition-all duration-300 transform hover:-translate-y-1 focus:outline-none focus:ring-4 focus:ring-[var(--color-secondary)]"
             aria-label="Create your account"
           >
             Register
