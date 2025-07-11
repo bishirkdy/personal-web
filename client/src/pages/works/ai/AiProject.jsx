@@ -2,13 +2,29 @@ import { useGetTopSixAiProjectsQuery } from "../../../redux/api/aiProjectApi";
 import { FaArrowRightToBracket } from "react-icons/fa6";
 import { useNavigate } from "react-router";
 
+const SkeletonCard = () => (
+  <div className=" w-full overflow-hidden rounded-lg aspect-square bg-gray-300 skeleton-animate">
+    <style>
+      {`
+        .skeleton-animate {
+          opacity : 0.2;
+          overflow: hidden;
+          background: linear-gradient(90deg, #222 25%, #eee 50%, #222 75%);
+          background-size: 200% 100%;
+          animation: skeleton-wave 2.5s infinite linear;
+        }
+        @keyframes skeleton-wave {
+          0% { background-position: 200% 0; }
+          100% { background-position: -200% 0; }
+        }
+      `}
+    </style>
+  </div>
+);
 const AiProject = () => {
   const isMobile = window.innerWidth <= 768;
   const { data, isLoading, error } = useGetTopSixAiProjectsQuery();
   const navigate = useNavigate();
-  if (isLoading) {
-    return <h2 className="text-center pt-10">Loading...</h2>;
-  }
 
   if (error) {
     return (
@@ -18,28 +34,32 @@ const AiProject = () => {
 
   return (
     <div className="bg-[var(--color-primary)] pt-10 px:4 lg:px-28 flex flex-col">
-      <div onClick={() => navigate("/ai-prompts")}
-       className="cursor-pointer relative flex items-center justify-center gap-4 w-full mb-12 px-4 group">
+      <div
+        onClick={() => navigate("/ai-prompts")}
+        className="cursor-pointer relative flex items-center justify-center gap-4 w-full mb-12 px-4 group"
+      >
         <h1 className="lg:text-4xl md:text-3xl text-xl font-bold text-nowrap">
           AI WORKS
         </h1>
         <hr className="border-3 border-gray-400 flex-grow" />
         <hr className="w-[5vw] group-hover:w-[8vw] group-active:w-[8vw] transform-border ease-in-out duration-300 border-3 border-[var(--color-secondary)] " />
-       <FaArrowRightToBracket className="text-4xl hidden group-hover:block group-active:block transform-border ease-in-out duration-300 "/>
+        <FaArrowRightToBracket className="text-4xl hidden group-hover:block group-active:block transform-border ease-in-out duration-300 " />
       </div>
 
       <div className="w-full px-4 py-8 pb-50">
         <div className="grid gap-4 grid-cols-1 md:grid-cols-3">
-          {data?.data?.map((work) => (
-            <div
-              key={work._id}
-              tabIndex="0"
-              className="relative group w-full overflow-hidden rounded-lg shadow aspect-square cursor-pointer focus:outline-none"
-            >
-              <img
-                src={work.image}
-                alt={work.name}
-                className="
+          {isLoading
+            ? Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)
+            : data?.data?.map((work) => (
+                <div
+                  key={work._id}
+                  tabIndex="0"
+                  className="relative group w-full overflow-hidden rounded-lg shadow aspect-square cursor-pointer focus:outline-none"
+                >
+                  <img
+                    src={work.image}
+                    alt={work.name}
+                    className="
                 w-full
                 h-full
                 object-cover
@@ -50,11 +70,11 @@ const AiProject = () => {
                 focus:scale-105
                 rounded-lg
               "
-                loading="loading..."
-              />
+                    loading="loading..."
+                  />
 
-              <div
-                className="
+                  <div
+                    className="
                 absolute bottom-0 left-0 right-0
                 bg-white bg-opacity-50
                 opacity-0 translate-y-full
@@ -66,14 +86,18 @@ const AiProject = () => {
                 flex flex-col justify-end
                 rounded-lg
               "
-              >
-                <h2 className={`${isMobile ? "text-sm" : "text-lg"} font-bold`}>
-                  Prompt
-                </h2>
-                <p className="text-sm">{work.prompt}</p>
-              </div>
-            </div>
-          ))}
+                  >
+                    <h2
+                      className={`${
+                        isMobile ? "text-sm" : "text-lg"
+                      } font-bold`}
+                    >
+                      Prompt
+                    </h2>
+                    <p className="text-sm">{work.prompt}</p>
+                  </div>
+                </div>
+              ))}
         </div>
       </div>
     </div>

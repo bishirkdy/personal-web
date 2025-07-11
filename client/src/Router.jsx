@@ -22,7 +22,7 @@ import User from "./pages/admin/users/User";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-
+      
       <Route path="login" element={<Login />} />
       <Route path="register" element={<Register />} />
       <Route path="verify-account" element={<VerifyAccount />} />

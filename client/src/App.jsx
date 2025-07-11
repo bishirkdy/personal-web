@@ -5,7 +5,7 @@ import Home from "./pages/Home";
 
 const App = () => {
   const location = useLocation();
-  const { contactRef } = useOutletContext();
+  const { contactRef , aboutRef } = useOutletContext();
 
   useEffect(() => {
     if (location.state?.scrollToContact) {
@@ -18,7 +18,7 @@ const App = () => {
 
   return (
     <>
-      <Home contactRef={contactRef} />
+      <Home contactRef={contactRef} aboutRef={aboutRef} />
     </>
   );
 };

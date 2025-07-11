@@ -19,7 +19,7 @@ const Contact = () => {
   useEffect(() => {
     const observer = new window.IntersectionObserver(
       ([entry]) => {
-        setVisible(entry.isIntersecting);
+       setVisible(entry.isIntersecting);
       },
       { threshold: 0.25 }
     );
@@ -35,7 +35,7 @@ const Contact = () => {
       setSent(true);
       setTimeout(() => setSent(false), 1600);
       e.target.reset();
-    }, 1200);
+    }, 3000);
   };
 
   return (

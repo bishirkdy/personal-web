@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { IoFilterSharp } from "react-icons/io5";
 import { IoMdSearch } from "react-icons/io";
 import { useSearchParams } from "react-router-dom";
@@ -6,14 +6,26 @@ import { useNavigate } from "react-router-dom";
 
 import { useGetAllProjectQuery } from "../../redux/api/projectApi";
 
-const software = [
-  "illustration",
-  "photoshop",
-  "indesign",
-  "premier",
-  "figma",
-  "code",
-];
+const SkeletonCard = () => (
+  <div className="relative w-full overflow-hidden rounded-lg aspect-video skeleton-animate">
+    <style>
+      {`
+        .skeleton-animate {
+          opacity : 0.2;
+          overflow: hidden;
+          background: linear-gradient(90deg, #222 25%, #eee 50%, #222 75%);
+          background-size: 200% 100%;
+          animation: skeleton-wave 2.5s infinite linear;
+        }
+        @keyframes skeleton-wave {
+          0% { background-position: 200% 0; }
+          100% { background-position: -200% 0; }
+        }
+      `}
+    </style>
+  </div>
+);
+
 const MyWork = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState(searchParams.get("q" || ""));
@@ -26,8 +38,13 @@ const MyWork = () => {
 
   const [filterActive, setFilterActive] = useState(false);
   const { data, error, isLoading } = useGetAllProjectQuery();
+
   const allCategories = data?.project
     ? Array.from(new Set(data.project.map((p) => p.category).filter(Boolean)))
+    : [];
+
+  const software = data?.project
+    ? Array.from(new Set(data.project.map((s) => s.software).filter(Boolean)))
     : [];
 
   const navigate = useNavigate();
@@ -50,20 +67,19 @@ const MyWork = () => {
       selectedCategories.length === 0 ||
       selectedCategories.includes(project.category);
 
-    // const softwareMatch =
-    //   !selectedSoftware || project.software === selectedSoftware;
+    const softwareMatch =
+      !selectedSoftware || project.software === selectedSoftware;
 
     const searchMatch =
       !searchTerm ||
-      (project.name &&
-        project.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      (project.description &&
-        project.description.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (project.name && project.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (project.description && project.description.toLowerCase().includes(searchTerm.toLowerCase())) ||
       (project.price && project.price.toString().includes(searchTerm)) ||
-      (project.offerPrice &&
-        project.offerPrice.toString().includes(searchTerm));
+      (project.offerPrice && project.offerPrice.toString().includes(searchTerm)) ||
+      (project.software && project.software.toString().includes(searchTerm)) ||
+      (project.category && project.category.toString().includes(searchTerm));
 
-    return categoryMatch && searchMatch;
+    return categoryMatch && softwareMatch && searchMatch;
   });
 
   const handleCategoryChange = (category) => {
@@ -172,77 +188,67 @@ const MyWork = () => {
             </div>
           </aside>
 
-          <main
-            className={`w-full ${
-              filterActive ? "md:w-3/4" : "w-full"
-            }`}
-          >
-            {isLoading ? (
-              <div className="flex items-center justify-center min-h-[200px]">
-                <span className="text-gray-500">Loading projects...</span>
-              </div>
-            ) : error ? (
-              <div className="flex items-center justify-center min-h-[200px]">
-                <span className="text-red-500">Failed to load projects.</span>
-              </div>
-            ) : (
-              <div
-                className={`grid gap-6 grid-cols-1
-        ${
-          filterActive
-            ? "sm:grid-cols-2 lg:grid-cols-3"
-            : "sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
-        }`}
-              >
-                {filteredProjects && filteredProjects.length > 0 ? (
-                  filteredProjects.map((project) => (
-                    <div
-                      key={project._id}
-                      onClick={() => navigate(`/projects/${project._id}`)}
-                      className="bg-white rounded-xl shadow hover:scale-[1.02] transition-transform cursor-pointer flex flex-col overflow-hidden group"
-                    >
-                      {/* 16:9 Thumbnail */}
-                      <div className="relative w-full aspect-video overflow-hidden bg-gray-100">
-                        <img
-                          src={project.image}
-                          alt={project.title || project.id}
-                          loading="lazy"
-                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                        />
-                        {/* Optional subtle overlay on hover */}
-                        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                      </div>
-
-                      {/* Content below thumbnail */}
-                      <div className="p-3 space-y-1 flex flex-col">
-                        <h3 className="text-sm font-semibold text-gray-800 truncate">
-                          {project.name}
-                        </h3>
-                        <p className="text-xs text-gray-500 truncate">
-                          {project.description}
-                        </p>
-                        <div className="flex flex-wrap gap-1 mt-1">
-                          {project.category && (
-                            <span className="bg-[var(--color-primary-light,#e0e7ff)] text-xs rounded-full px-2 py-0.5 text-[var(--color-secondary)]">
-                              {project.category}
-                            </span>
-                          )}
-                          {project.software && (
-                            <span className="bg-gray-100 text-xs rounded-full px-2 py-0.5 text-gray-500">
-                              {project.software}
-                            </span>
-                          )}
-                        </div>
+          <main className={`w-full ${filterActive ? "md:w-3/4" : "w-full"}`}>
+            <div
+              className={`grid gap-6 grid-cols-1
+      ${
+        filterActive
+          ? "sm:grid-cols-2 lg:grid-cols-3"
+          : "sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+      }`}
+            >
+              {isLoading ? (
+                Array.from({ length: 8 }).map((_, i) => (
+                  <SkeletonCard key={i} />
+                ))
+              ) : error ? (
+                <div className="col-span-full flex items-center justify-center min-h-[200px]">
+                  <span className="text-red-500">Failed to load projects.</span>
+                </div>
+              ) : filteredProjects && filteredProjects.length > 0 ? (
+                filteredProjects.map((project) => (
+                  <div
+                    key={project._id}
+                    onClick={() => navigate(`/projects/${project._id}`)}
+                    className="bg-white rounded-xl shadow hover:scale-[1.02] transition-transform cursor-pointer flex flex-col overflow-hidden group"
+                  >
+                    <div className="relative w-full aspect-video overflow-hidden bg-gray-100">
+                      <img
+                        src={project.image}
+                        alt={project.title || project.id}
+                        loading="lazy"
+                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
+                    <div className="p-3 space-y-1 flex flex-col">
+                      <h3 className="text-sm font-semibold text-gray-800 truncate">
+                        {project.name}
+                      </h3>
+                      <p className="text-xs text-gray-500 truncate">
+                        {project.description}
+                      </p>
+                      <div className="flex flex-wrap gap-1 mt-1">
+                        {project.category && (
+                          <span className="bg-[var(--color-primary-light,#e0e7ff)] text-xs rounded-full px-2 py-0.5 text-[var(--color-secondary)]">
+                            {project.category}
+                          </span>
+                        )}
+                        {project.software && (
+                          <span className="bg-gray-100 text-xs rounded-full px-2 py-0.5 text-gray-500">
+                            {project.software}
+                          </span>
+                        )}
                       </div>
                     </div>
-                  ))
-                ) : (
-                  <div className="col-span-full flex items-center justify-center min-h-[200px]">
-                    <span className="text-gray-400">No projects found.</span>
                   </div>
-                )}
-              </div>
-            )}
+                ))
+              ) : (
+                <div className="col-span-full flex items-center justify-center min-h-[200px]">
+                  <span className="text-gray-400">No projects found.</span>
+                </div>
+              )}
+            </div>
           </main>
         </div>
       </div>

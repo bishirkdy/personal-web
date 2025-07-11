@@ -8,6 +8,25 @@ import { FaCopy } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { MdDeleteForever } from "react-icons/md";
 
+const SkeletonCard = () => (
+  <div className="relative w-full overflow-hidden rounded-lg aspect-square skeleton-animate">
+    <style>
+      {`
+        .skeleton-animate {
+          opacity : 0.2;
+          overflow: hidden;
+          background: linear-gradient(90deg, #222 25%, #eee 50%, #222 75%);
+          background-size: 200% 100%;
+          animation: skeleton-wave 2.5s infinite linear;
+        }
+        @keyframes skeleton-wave {
+          0% { background-position: 200% 0; }
+          100% { background-position: -200% 0; }
+        }
+      `}
+    </style>
+  </div>
+);
 const AiPrompt = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState(searchParams.get("q" || ""));
@@ -16,15 +35,11 @@ const AiPrompt = () => {
   );
 
   const [filterActive, setFilterActive] = useState(false);
-  const { data, error, isLoading , refetch } = useGetAiProjectQuery();
+  const { data, error, isLoading, refetch } = useGetAiProjectQuery();
   const [deleteAiPrompt, { isLoading: deleteLoading, isError: deleteError }] =
     useDeleteAiPromptMutation();
   const { user } = useSelector((state) => state.auth);
   const isAdmin = user?.role === "admin";
-
-  const allProject = data?.data
-    ? Array.from(new Set(data.data.map((d) => d.software).filter(Boolean)))
-    : [];
 
   const updateSearchParams = (term, software) => {
     const params = new URLSearchParams();
@@ -72,7 +87,7 @@ const AiPrompt = () => {
     }
   };
   return (
-    <div className="min-h-screen flex flex-col bg-[var(--color-primary)]">
+    <div className="min-h-screen flex pt-16 flex-col bg-[var(--color-primary)]">
       <div className="w-full bg-[var(--color-primary)]">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 bg-[var(--color-primary)] py-4 px-4 md:px-8 lg:px-32">
           <button
@@ -137,14 +152,6 @@ const AiPrompt = () => {
 
           <main className={`w-full ${filterActive ? "md:w-3/4" : "w-full"}`}>
             {isLoading ? (
-              <div className="flex items-center justify-center min-h-[200px]">
-                <span className="text-gray-500">Loading prompts...</span>
-              </div>
-            ) : error ? (
-              <div className="flex items-center justify-center min-h-[200px]">
-                <span className="text-red-500">Failed to load ai prompts.</span>
-              </div>
-            ) : (
               <div
                 className={`grid grid-cols-1 ${
                   filterActive
@@ -152,45 +159,59 @@ const AiPrompt = () => {
                     : "sm:grid-cols-2 lg:grid-cols-4"
                 } gap-6`}
               >
-                {filteredProjects && filteredProjects.length > 0 ? (
-                  filteredProjects.map((prompt) => (
-                    <div
-                      key={prompt._id}
-                      className="bg-white relative rounded-xl shadow-lg overflow-hidden transition-transform hover:scale-[1.02] flex flex-col"
-                    >
-                      <div className="w-full aspect-square bg-gray-100 flex items-center justify-center">
-                        <img
-                          src={prompt.image}
-                          alt={prompt._id}
-                          loading="Loading"
-                          className="w-full h-full object-cover object-center"
-                          style={{ aspectRatio: "1 / 1" }}
-                        />
-                      </div>
-                      <div className="p-4">
-                        <div className="flex flex-row  flex-wrap gap-2 mt-2">
-                          <span className="bg-[var(--color-primary-light,#e0e7ff)] text-xs rounded-lg px-2 py-1 text-[var(--color-secondary)] font-medium">
-                            {prompt.software}
-                          </span>
-                          <button className="flex gap-2 items-center cursor-pointer hover:bg-white hover:text-[var(--color-secondary)] bg-[var(--color-secondary)] text-xs rounded-lg px-2 py-1 text-white font-medium">
-                            <FaCopy />
-                            Copy Prompt
-                          </button>
-                        </div>
-                      </div>
-                      {isAdmin && (
-                        <MdDeleteForever
-                          onClick={() => handleDeletePrompt(prompt._id)}
-                          className="absolute right-2 top-2 text-2xl text-red-500 hover:scale-105 cursor-pointer hover:text-red-800"
-                        />
-                      )}
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <SkeletonCard key={i} />
+                ))}
+              </div>
+            ) : error ? (
+              <div className="flex items-center justify-center min-h-[200px]">
+                <span className="text-red-500">Failed to load ai prompts.</span>
+              </div>
+            ) : filteredProjects && filteredProjects.length > 0 ? (
+              <div
+                className={`grid grid-cols-1 ${
+                  filterActive
+                    ? "sm:grid-cols-2 lg:grid-cols-3"
+                    : "sm:grid-cols-2 lg:grid-cols-4"
+                } gap-6`}
+              >
+                {filteredProjects.map((prompt) => (
+                  <div
+                    key={prompt._id}
+                    className="bg-white relative rounded-xl shadow-lg overflow-hidden transition-transform hover:scale-[1.02] flex flex-col"
+                  >
+                    <div className="w-full aspect-square bg-gray-100 flex items-center justify-center">
+                      <img
+                        src={prompt.image}
+                        alt={prompt._id}
+                        loading="lazy"
+                        className="w-full h-full object-cover object-center"
+                        style={{ aspectRatio: "1 / 1" }}
+                      />
                     </div>
-                  ))
-                ) : (
-                  <div className="col-span-full flex items-center justify-center min-h-[200px]">
-                    <span className="text-gray-400">No prompt found.</span>
+                    <div className="p-4">
+                      <div className="flex flex-row flex-wrap gap-2 mt-2">
+                        <span className="bg-[var(--color-primary-light,#e0e7ff)] text-xs rounded-lg px-2 py-1 text-[var(--color-secondary)] font-medium">
+                          {prompt.software}
+                        </span>
+                        <button className="flex gap-2 items-center cursor-pointer hover:bg-white hover:text-[var(--color-secondary)] bg-[var(--color-secondary)] text-xs rounded-lg px-2 py-1 text-white font-medium">
+                          <FaCopy />
+                          Copy Prompt
+                        </button>
+                      </div>
+                    </div>
+                    {isAdmin && (
+                      <MdDeleteForever
+                        onClick={() => handleDeletePrompt(prompt._id)}
+                        className="absolute right-2 top-2 text-2xl text-red-500 hover:scale-105 cursor-pointer hover:text-red-800"
+                      />
+                    )}
                   </div>
-                )}
+                ))}
+              </div>
+            ) : (
+              <div className="col-span-full flex items-center justify-center min-h-[200px]">
+                <span className="text-gray-400">No prompt found.</span>
               </div>
             )}
           </main>

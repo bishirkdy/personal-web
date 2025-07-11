@@ -7,7 +7,7 @@ import { IoMdLogOut } from "react-icons/io";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-const NavBar = ({ onCartClick, onContactClick }) => {
+const NavBar = ({ onCartClick, onContactClick , onAboutClick }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [openSub, setOpenSub] = useState(null);
   const [isActive, setIsActive] = useState(false);
@@ -60,6 +60,15 @@ const NavBar = ({ onCartClick, onContactClick }) => {
     setMenuOpen(false);
   };
 
+  const handleAboutClick = () => {
+    if (location.pathname !== "/") {
+      navigate("/", { state: { scrollToAbout: true } });
+    } else {
+      onAboutClick();
+    }
+    setMenuOpen(false);
+  };
+
   const handleLogin = () => {
     navigate("/login");
     setMenuOpen(false);
@@ -76,7 +85,7 @@ const NavBar = ({ onCartClick, onContactClick }) => {
 
   const navItems = [
     { href: "/", label: "Home" },
-    { href: "/about", label: "About" },
+    { isAbout: true , label: "About" },
     { label: "Work" },
     { isContact: true, label: "Contact" },
   ];
@@ -159,10 +168,19 @@ const NavBar = ({ onCartClick, onContactClick }) => {
                 </div>
               )}
             </>
-          ) : item.isContact ? (
+          ) : item.isAbout ? (
+            <button
+              onClick={handleAboutClick}
+              className="block px-3 py-2 rounded-lg w-full text-start text-black hover:bg-black hover:text-white transition"
+            >
+              {item.label}
+            </button>
+          )
+          
+          : item.isContact ? (
             <button
               onClick={handleContactClick}
-              className="block px-3 py-2 rounded-lg text-black hover:bg-black hover:text-white transition"
+              className="block px-3 py-2 rounded-lg w-full text-start text-black hover:bg-black hover:text-white transition"
             >
               {item.label}
             </button>
@@ -188,7 +206,7 @@ const NavBar = ({ onCartClick, onContactClick }) => {
             onClick={() =>
               setOpenSub(openSub === "admin" ? null : "admin")
             }
-            className="flex items-center justify-between w px-3 py-2 rounded-lg text-black hover:bg-black hover:text-white transition"
+            className="flex items-center justify-between w-full px-3 py-2 rounded-lg text-black hover:bg-black hover:text-white transition"
           >
             Admin
             <span
@@ -255,19 +273,15 @@ const NavBar = ({ onCartClick, onContactClick }) => {
                 )}
               </button>
             </div>
-            {/* <div className="sm:hidden">
-              <button
-                id="hamburgerBtn"
-                aria-label="Open menu"
-                onClick={() => setMenuOpen(true)}
-                className="text-3xl text-black font-semibold transition"
-              >
-                <CgMenuRight  />
-              </button>
-            </div> */}
           </>
         ) : (
-          <div className="w-full flex justify-end">
+          <div className="w-full flex flex-row justify-between items-center">
+            <a
+              href="/"
+              className="navName text-lg md:text-xl lg:text-2xl font-bold transition-colors text-black"
+            >
+              Bishir kdy
+            </a>
             <button
               id="hamburgerBtn"
               aria-label="Open menu"
@@ -275,7 +289,7 @@ const NavBar = ({ onCartClick, onContactClick }) => {
               className=" text-black cursor-pointer transition"
               style={{ background: "var(--color-primary)" }}
             >
-              <CgMenuRight className="font-semibold text-3xl"  />
+              <CgMenuRight className="font-semibold text-3xl"  /> 
             </button>
           </div>
         )}

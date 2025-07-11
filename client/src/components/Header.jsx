@@ -2,27 +2,30 @@ import React, { useEffect, useRef, useState } from "react";
 import profile from "../assets/profile.jpg";
 
 const Header = () => {
-  const [text , setText] = useState("")
-  const message = "HELLO! I'M BISHIR"
+  const [text, setText] = useState("");
+  const message = "HELLO! I'M BISHIR";
   const typingIntervalRef = useRef(null);
   const indexRef = useRef(0);
 
   const startTyping = () => {
     clearInterval(typingIntervalRef.current);
-    setText("")
+    setText("");
     indexRef.current = 0;
 
     typingIntervalRef.current = setInterval(() => {
-      setText((prev) => {
-        const next = prev + message[indexRef.current];
-        indexRef.current ++;
-        if (indexRef.current >= message.length) {
-          clearInterval(typingIntervalRef.current);
-        }
-        return next;
-      } , [3000]);
-    }, 100)
-  }
+      setText(
+        (prev) => {
+          const next = prev + message[indexRef.current];
+          indexRef.current++;
+          if (indexRef.current >= message.length) {
+            clearInterval(typingIntervalRef.current);
+          }
+          return next;
+        },
+        [3000]
+      );
+    }, 100);
+  };
   useEffect(() => {
     startTyping();
     return () => {
@@ -32,15 +35,17 @@ const Header = () => {
   useEffect(() => {
     const handleScroll = () => {
       startTyping();
-    }
+    };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  })
+  });
   return (
     <header className="bg-[var(--color-primary)] px-4 lg:pl-28 mt-[60px] lg:mt-[65px] min-h-[calc(100vh-65px)] flex flex-col md:flex-row items-center">
       <div className="w-full md:w-[50%] md:pr-10">
         <div className="px- py-8 flex flex-col items-center text-center md:items-start md:text-start gap-4">
-          <h2 className="font-semibold text-sm md:text-base text-black">👋{text}</h2>
+          <h2 className="font-semibold text-sm md:text-base text-black">
+            👋{text}
+          </h2>
           <h1 className="savate-font  text-3xl xs:text-4xl sm:text-5xl md:text-5xl lg:text-6xl leading-tight text-black">
             Bringing your vision to life through connection
           </h1>

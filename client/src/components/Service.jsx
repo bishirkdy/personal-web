@@ -19,8 +19,6 @@ const Service = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const handleClick = (idx) => {
-    console.log(idx);
-
     setActiveIndex((prev) => (prev === idx ? null : idx));
   };
 
@@ -39,7 +37,7 @@ const Service = () => {
          w-full items-center
         
          "
-        // style={{ WebkitOverflowScrolling: "touch" }}
+         style={{ WebkitOverflowScrolling: "touch" }}
       >
         {services.map((service, idx) => {
           const isActive = idx === activeIndex;

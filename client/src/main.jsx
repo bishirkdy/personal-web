@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import store from "./redux/store.js";
 import router from "./Router.jsx";
 import { RouterProvider } from "react-router-dom";
-import { ScrollProvider } from "./components/ScrollContact.jsx";
+import { ContextProvider } from "./components/ContestProvider.jsx";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 
@@ -12,10 +12,10 @@ const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUB_KEY);
 
 createRoot(document.getElementById("root")).render(
   <Provider store={store}>
-    <ScrollProvider>
+    <ContextProvider>
       <Elements stripe={stripePromise}>
         <RouterProvider router={router} />
       </Elements>
-    </ScrollProvider>
+    </ContextProvider>
   </Provider>
 );

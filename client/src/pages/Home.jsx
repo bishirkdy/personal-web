@@ -7,14 +7,16 @@ import About from "../components/About";
 import Contact from "../components/Contact";
 import AiProject from "./works/ai/AiProject";
 
-const Home = ({ contactRef }) => {
+const Home = ({ contactRef  , aboutRef}) => {
   return (
     <div>
       <Header />
       <Service />
       <Work />
       <AiProject />
+      <section ref={aboutRef}>
       <About />
+      </section>
       <section ref={contactRef}>
         <Contact />
       </section>
